@@ -6,7 +6,10 @@ class TestDoublesTest extends \PHPUnit\Framework\TestCase
     {
         $mock = $this->createMock(\App\ExampleService::class);
 
-        $mock->method('doSomething')->willReturn('foo');
+        $mock->expects($this->once())
+            ->method('doSomething')
+            ->with('bar')
+            ->willReturn('foo');
 
         $exampleCommand = new \App\ExampleCommand($mock);
 
