@@ -22,4 +22,17 @@ class TestDoublesTest extends \PHPUnit\Framework\TestCase
 
         $this->assertNull($mock->doSomething('bar'));
     }
+
+    public function testConsecutiveReturns()
+    {
+        $mock = $this->createMock(\App\ExampleService::class);
+
+        $mock->method('doSomething')
+            ->will($this->onConsecutiveCalls(1, 2));
+
+        foreach ([1, 2] as $value) {
+
+            $this->assertSame($value, $mock->doSomething('bar'));
+        }
+    }
 }
