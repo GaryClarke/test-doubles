@@ -4,7 +4,7 @@ namespace App;
 
 class ExampleService
 {
-    public function doSomething($arg): string
+    public function doSomething($arg)
     {
 
     }
