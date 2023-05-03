@@ -15,4 +15,11 @@ class TestDoublesTest extends \PHPUnit\Framework\TestCase
 
         $this->assertSame('foo', $exampleCommand->execute('bar'));
     }
+
+    public function testReturnTypes(): void
+    {
+        $mock = $this->createMock(\App\ExampleService::class);
+
+        $this->assertNull($mock->doSomething('bar'));
+    }
 }
