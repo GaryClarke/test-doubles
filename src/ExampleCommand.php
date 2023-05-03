@@ -11,7 +11,7 @@ class ExampleCommand
         $this->service = $service;
     }
 
-    public function execute(string $arg): string
+    public function execute(string $arg)
     {
         return $this->service->doSomething($arg);
     }
