@@ -35,4 +35,16 @@ class TestDoublesTest extends \PHPUnit\Framework\TestCase
             $this->assertSame($value, $mock->doSomething('bar'));
         }
     }
+
+    public function testExceptionsThrown(): void
+    {
+        $mock = $this->createMock(\App\ExampleService::class);
+
+        $mock->method('doSomething')
+            ->willThrowException(new RuntimeException());
+
+        $this->expectException(RuntimeException::class);
+
+        $mock->doSomething('bar');
+    }
 }
