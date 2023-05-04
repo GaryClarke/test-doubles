@@ -93,4 +93,31 @@ class TestDoublesTest extends \PHPUnit\Framework\TestCase
 
         $mock->doSomething('foobar', 101, null);
     }
+
+    public function testCallbackArguments(): void
+    {
+        $mock = $this->createMock(\App\ExampleService::class);
+
+        $mock->expects($this->once())
+            ->method('doSomething')
+            ->with($this->callback(function($object) {
+                $this->assertInstanceOf(\App\ExampleDependency::class, $object);
+                return $object->exampleMethod() === 'Example string';
+            }));
+
+        $mock->doSomething(new \App\ExampleDependency());
+    }
+
+    public function testIdenticalTo(): void
+    {
+        $dependency = new \App\ExampleDependency();
+
+        $mock = $this->createMock(\App\ExampleService::class);
+
+        $mock->expects($this->once())
+            ->method('doSomething')
+            ->with($this->identicalTo($dependency));
+
+        $mock->doSomething($dependency);
+    }
 }
