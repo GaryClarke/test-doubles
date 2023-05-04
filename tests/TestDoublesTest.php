@@ -47,4 +47,24 @@ class TestDoublesTest extends \PHPUnit\Framework\TestCase
 
         $mock->doSomething('bar');
     }
+
+    public function testCallbackReturns(): void
+    {
+        $mock = $this->createMock(\App\ExampleService::class);
+
+        $mock->method('doSomething')
+            ->willReturnCallback(function($arg) {
+
+                if ($arg % 2 === 0) {
+                    return $arg;
+                }
+
+                throw new InvalidArgumentException();
+            });
+
+        $this->assertSame(10, $mock->doSomething(10));
+
+        $this->expectException(InvalidArgumentException::class);
+        $mock->doSomething(9);
+    }
 }
