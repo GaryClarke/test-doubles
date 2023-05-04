@@ -67,4 +67,30 @@ class TestDoublesTest extends \PHPUnit\Framework\TestCase
         $this->expectException(InvalidArgumentException::class);
         $mock->doSomething(9);
     }
+
+    public function testWithEqualTo(): void
+    {
+        $mock = $this->createMock(\App\ExampleService::class);
+
+        $mock->expects($this->once())
+            ->method('doSomething')
+            ->with($this->equalTo('bar'));
+
+        $mock->doSomething('bar');
+    }
+
+    public function testMultipleArgs(): void
+    {
+        $mock = $this->createMock(\App\ExampleService::class);
+
+        $mock->expects($this->once())
+            ->method('doSomething')
+            ->with(
+                $this->stringContains('foo'),
+                $this->greaterThanOrEqual(100),
+                $this->anything()
+            );
+
+        $mock->doSomething('foobar', 101, null);
+    }
 }
