@@ -120,4 +120,43 @@ class TestDoublesTest extends \PHPUnit\Framework\TestCase
 
         $mock->doSomething($dependency);
     }
+
+    public function testMockBuilder()
+    {
+        $mock = $this->getMockBuilder(\App\ExampleService::class)
+            ->setConstructorArgs([100, 200])
+            ->getMock();
+
+        $mock->method('doSomething')->willReturn('foo');
+
+        $this->assertSame('foo', $mock->doSomething('bar'));
+    }
+
+    public function testOnlyMethods()
+    {
+        $mock = $this->getMockBuilder(\App\ExampleService::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['doSomething'])
+            ->getMock();
+
+        $mock->method('doSomething')->willReturn('foo');
+
+        $this->assertSame('foo', $mock->nonMockedMethod('bar'));
+    }
+
+    public function testAddMethods()
+    {
+        $mock = $this->getMockBuilder(\App\ExampleService::class)
+            ->disableOriginalConstructor()
+            ->addMethods(['nonExistentMethod'])
+            ->getMock();
+
+        $mock->expects($this->once())
+            ->method('nonExistentMethod')
+            ->with($this->isInstanceOf(\App\ExampleDependency::class))
+            ->willReturn('foo');
+
+        $this->assertSame('foo', $mock->nonExistentMethod(new \App\ExampleDependency()));
+
+    }
 }
